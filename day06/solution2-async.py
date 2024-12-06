@@ -1,7 +1,7 @@
 import os
 import re
 from enum import Enum
-import asyncio
+from multiprocessing import Process, Queue
 
 currentPath = os.path.normpath(os.path.realpath(os.path.split(__file__)[0]))
 
@@ -34,11 +34,7 @@ def printBoard():
     # print(f"{len(visited)}\n\n")
     pass
 
-
-
-total = 0
-
-async def run(board: list[list[str]], sY: int, sX: int, sD: dr, j: int, i: int) -> int:
+def run(board: list[list[str]], sY: int, sX: int, sD: dr, j: int, i: int) -> int:
 
     gY, gX, gD = sY, sX, sD
     vT = []
@@ -51,6 +47,11 @@ async def run(board: list[list[str]], sY: int, sX: int, sD: dr, j: int, i: int) 
         if (gX, gY, gD) in vT:
             print(f"({j}, {i}) INFINITE LOOP")
             # printBoard()
+            total = tQ.get()
+            total += 1
+            tQ.put(total)
+            # tQ.put((gX, gY))
+            # total += 1
             return 1
             break # fucking woohoo
 
@@ -109,9 +110,7 @@ async def run(board: list[list[str]], sY: int, sX: int, sD: dr, j: int, i: int) 
         # printBoard()
 
 
-
-async def main():
-
+if __name__ == '__main__':
     with open(filename, "r") as f:
         lines = f.readlines()
         board = [[el for el in line.strip()] for line in lines]
@@ -128,6 +127,10 @@ async def main():
 
     tasks = []
 
+    total = 0
+    tQ = Queue()
+    tQ.put(total)
+
     for i in range(len(board)):
         for j in range(len(board[i])):
             if i == 5 and j == 7:
@@ -141,18 +144,22 @@ async def main():
             # printBoard()
             pass
 
-            tasks.append(asyncio.create_task(run(board, sY, sX, sD, j, i)))
-            print(f"{len(tasks)} tasks running right now.")
+            tasks.append(Process(target=run, args=(board, sY, sX, sD, j, i), name=f'({j},{i})'))
             pass
 
 
     # god i hate this
 
-    for i in tasks:
-        await i
 
+    for i in tasks:
+        i.start()
+        print(f'Process {i.name} started.')
+
+    for i in tasks:
+        i.join()
+        # total += i.exitcode
+        print(f'Process {i.name} finished.')
+
+    total = tQ.get()
     print(total)
     pass
-
-
-asyncio.run(main())
