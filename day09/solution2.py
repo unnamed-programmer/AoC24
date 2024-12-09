@@ -54,7 +54,7 @@ for fileID in range(sorted([_ for _ in disk if _ != '.'])[-1], 0, -1):
 
     # print()
     # for block in disk:
-    #     print(block, end='')
+    # print(block, end='')
     print()
     # print(f'{disk.count('.')} empty blocks remaining...')
 

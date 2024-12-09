@@ -127,6 +127,8 @@ if __name__ == '__main__':
 
     tasks = []
 
+    
+
     total = 0
     tQ = Queue()
     tQ.put(total)
