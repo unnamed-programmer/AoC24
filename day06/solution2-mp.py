@@ -46,16 +46,20 @@ def run(board: list[list[str]], sY: int, sX: int, sD: dr, j: int, i: int, count:
                 # if not gP in visited: visited.append(gP)
                 if not (gP, gD) in vT: vT.append((gP, gD))
                 gP = nxP
+
             else:
                 gD = dr((gD.value + 1) % 4)
 
                 nxP = gP[0] + drVec[gD.value][0], gP[1] + drVec[gD.value][1]
 
                 if board[nxP[0]][nxP[1]] == '.':
+                    if not (gP, gD) in vT: vT.append((gP, gD))
                     gP = nxP
 
                 else:
                     gD = dr((gD.value + 1) % 4)
+
+                    if not (gP, gD) in vT: vT.append((gP, gD))
                     gP = nxP = gP[0] + drVec[gD.value][0], gP[1] + drVec[gD.value][1]
 
         else:
@@ -98,7 +102,6 @@ if __name__ == '__main__':
     total = 0
     for i in returns:
         total += i
-        print(f'task returned {i}')
 
     # total = tQ.get()
     print(total)
