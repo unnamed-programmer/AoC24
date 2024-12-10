@@ -70,6 +70,9 @@ def run(board: list[list[str]], sY: int, sX: int, sD: dr, j: int, i: int, count:
         else:
             print(f"Process {count}: ({j}, {i}) returns")
             visited = list(set([x[0] for x in vT]))
+            with open(os.path.join(currentPath, "correctVisted.txt"), 'x') as f1:
+                for v in visited:
+                    f1.write(f"{v[0]}, {v[1]}\n")
             return visited if retVisited else 0
 
 
