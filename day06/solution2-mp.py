@@ -1,3 +1,8 @@
+## NOTE TO SELF:
+## RAYCAST THE LINES
+## PATH = BOARD[gX:][gY] or otherwise appropriate
+## MVCOUNT = PATH.INDEX('#')
+
 import os
 from enum import Enum
 from multiprocessing import Pool
