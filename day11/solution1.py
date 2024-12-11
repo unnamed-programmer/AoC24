@@ -1,5 +1,4 @@
 import os
-import re
 
 currentPath = os.path.normpath(os.path.realpath(os.path.split(__file__)[0]))
 
