@@ -43,6 +43,7 @@ def run(board: list[list[str]], sY: int, sX: int, sD: dr, j: int, i: int, count:
 
         if (gP, gD) in vT:
             print(f"Process {count}: ({j}, {i}) INFINITE LOOP")
+            # with open(os.path.join(currentPath, "old.txt"), 'w') as f2: f2.writelines([f'{v[0][0]}, {v[0][1]}' for v in vT])
             return visited if retVisited else 1
 
         if nxP[0] in range(0, len(board)) and nxP[1] in range(0, len(board[0])):
@@ -70,9 +71,11 @@ def run(board: list[list[str]], sY: int, sX: int, sD: dr, j: int, i: int, count:
         else:
             print(f"Process {count}: ({j}, {i}) returns")
             visited = list(set([x[0] for x in vT]))
-            with open(os.path.join(currentPath, "correctVisted.txt"), 'x') as f1:
-                for v in visited:
-                    f1.write(f"{v[0]}, {v[1]}\n")
+            # with open(os.path.join(currentPath, "correctVisted.txt"), 'w') as f1:
+            #     for v in sorted(visited, key = lambda v: (v[0] * len(board)) + v[1]):
+            #         f1.write(f"{v[0]}, {v[1]}\n")
+
+            # with open(os.path.join(currentPath, "old.txt"), 'w') as f2: f2.writelines([f'{v[0][0]}, {v[0][1]}' for v in vT])
             return visited if retVisited else 0
 
 
@@ -107,9 +110,11 @@ if __name__ == '__main__':
     returns = p.starmap(run, args)
     # god i hate this
 
-    total = 0
-    for i in returns:
-        total += i
+    with open(os.path.join(currentPath, "old.txt"), 'w') as f2:
+        total = 0
+        for i in returns:
+            f2.write(str(i))
+            total += i
 
     # total = tQ.get()
     print(total)
