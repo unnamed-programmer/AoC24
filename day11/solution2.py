@@ -1,6 +1,5 @@
 import os
 import time
-from functools import cache
 
 
 currentPath = os.path.normpath(os.path.realpath(os.path.split(__file__)[0]))
@@ -10,20 +9,35 @@ filename = os.path.join(currentPath, "input.txt")
 with open(filename, "r") as f:
     stones = [int(s) for s in [line.strip() for line in f.readlines()][0].split(' ')]
 
-@cache
-def run(stone, steps):
-    if steps == 0:
-        return 1
+cache = {}
 
-    if stone == 0:
-        return run(1, steps - 1)
+def calc(stone, count):
+    global cache
 
-    st = str(stone)
-    ln = len(st)
+    if (stone, count) in cache.keys():
+        return cache[(stone, count)]
 
-    if ln % 2 == 0:
-        return run(int(st[:ln // 2]), steps - 1) + run(int(st[ln // 2:]), steps  -1)
+    else:
+        if count == 0:
+            r = 1
 
-    return run(stone * 2024, steps - 1)
+        elif stone == 0:
+            r = calc(1, count - 1)
 
-print(sum(run(stone, 75) for stone in stones))
+        elif len(str(stone)) % 2 == 0:
+            r = calc(int(str(stone)[:len(str(stone)) // 2]), count - 1) + calc(int(str(stone)[len(str(stone)) // 2:]), count - 1)
+
+        else:
+            r = calc(stone * 2024, count - 1)
+
+        cache[(stone, count)] = r
+        return r
+
+
+total = 0
+for stone in stones:
+    this = calc(stone, 75)
+    total += this
+
+print(total)
+print(len(cache))
