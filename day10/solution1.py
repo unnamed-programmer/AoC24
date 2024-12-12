@@ -1,4 +1,3 @@
-from email.errors import HeaderMissingRequiredValue
 import os
 
 currentPath = os.path.normpath(os.path.realpath(os.path.split(__file__)[0]))
